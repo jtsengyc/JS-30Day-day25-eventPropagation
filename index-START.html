@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Understanding JavaScript's Capture</title>
+</head>
+<body class="bod">
+
+  <div class="one">
+    <div class="two">
+      <div class="three">
+      </div>
+    </div>
+  </div>
+
+<style>
+  html {
+    box-sizing: border-box;
+  }
+  *, *:before, *:after { box-sizing: inherit; }
+
+  div {
+    width:100%;
+    padding:100px;
+  }
+
+  .one {
+    background: thistle;
+  }
+
+  .two {
+    background:mistyrose;
+  }
+
+  .three {
+    background:coral;
+  }
+</style>
+
+<button></button>
+<script>
+  let stopPropagation = false;
+  function bubbling(e) {
+    console.log('bubble direction', this.classList.value);
+    if(stopPropagation) {
+      e.stopPropagation();
+      e.stopImmediatePropagation();
+    }
+  }
+  function capture(e) {
+    console.log('capture direction', this.classList.value);
+    if(stopPropagation) {
+      e.stopPropagation();
+      e.stopImmediatePropagation();
+    }
+  }
+  function toggleEventPropagation() {
+    stopPropagation = !stopPropagation;
+  }
+
+  const divs = document.querySelectorAll('div');
+  divs.forEach(div => {
+    div.addEventListener('click', bubbling);
+    div.addEventListener('click', capture, {capture: true});
+  });
+
+  const btn = document.querySelector('button');
+  btn.addEventListener('click', toggleEventPropagation, {once: true});
+
+</script>
+</body>
+</html>
